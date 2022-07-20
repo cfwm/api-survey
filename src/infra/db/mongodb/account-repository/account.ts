@@ -1,7 +1,7 @@
-import { AddAccountRepository } from "../../../../data/protocols/add-account-repository"
-import { AddAccountModel } from "../../../../domain/usecases/add-account"
-import { AccountModel } from "../../../../domain/models/account"
-import { MongoHelper } from "../helpers/mongodb-helper"
+import { AddAccountRepository } from '../../../../data/protocols/add-account-repository'
+import { AddAccountModel } from '../../../../domain/usecases/add-account'
+import { AccountModel } from '../../../../domain/models/account'
+import { MongoHelper } from '../helpers/mongodb-helper'
 
 export class AccountMongoRepository implements AddAccountRepository {
   async add (accountData: AddAccountModel): Promise<AccountModel> {
@@ -17,13 +17,13 @@ export class AccountMongoRepository implements AddAccountRepository {
     }
 
     if (result.acknowledged) Object.assign(dataResult, {
-      id: true,
+      _id: result,
       name: 'any_name',
       email: 'any_email@email.com', 
       password: 'any_password',
     })
 
-    return dataResult
+    return MongoHelper.map(dataResult)
 
     // MongoDb version 5.0.9
     // return Object.assign({}, { acknowledged: result.acknowledged, insertedId: result.insertedId.toString() })
